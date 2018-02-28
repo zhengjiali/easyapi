@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--[if lte IE 8]>
+<script>
+document.documentElement.className += ' oldie';
+</script>
+<![endif]-->
+<meta name=”renderer” content=”webkit” />
+<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="expires" content="0" />
+<meta http-equiv="X-UA-Compatible" content="IE=8; IE=9; IE=10" />
+<meta charset="utf-8">
+<title>TSM</title>
+<style type="text/css">
+html,body{
+	width: 100%;
+	height: 100%;
+  min-width: 1350px !important;
+}
+body,td,th { font-family: "Source Sans Pro", sans-serif; }
+body { background-color: #fff; }
+.error-message{
+	font-size: 15px;
+	color: #EE2C2C;
+	font-weight: 500;
+	display: none;
+}
+</style>
+</head>
+<body>
+<div class="hearder">
+   	 <h1 class="title">TSM</h1><!-- <img class="pull-left zfw_logo" src="WuYuImages/zfw_logo2.png"/> -->
+</div>
+<div class="wrapper">
+	<div class="container">
+		<h1>欢迎</h1>
+		<form class="form" action="{% url 'login' %}" method="POST">
+			<label for="username" class="error-message">账号或密码错误！</label>
+			<input type="text" placeholder="请输入账号" id="username" name="username">
+			<input type="password" placeholder="请输入密码" name="password">
+			<input type="submit" id="login-button">登陆</input>
+            {% csrf_token %}
+		</form>
+	</div>	
+	
+	
+</div>
+{#<script src="/static/dist/js/jquery2.min.js"></script>#}
+{#<script type="text/javascript">#}
+{#$('#login-button').click(function(event){#}
+{#	location.href="/api";#}
+{#	 var username = $("#username").val();#}
+{#  	var password = $("#password").val();#}
+{#	 $.ajax({#}
+{#     url:'http:127.0.0.1:8000/',#}
+{#     type : "Post",#}
+{#     data: {"username":username,"password":password},#}
+{#     dataType : "json",#}
+{#     success:function(data)#}
+{#     {#}
+{#       if(data.status===0){#}
+{#         location.href="/index";#}
+{#       }else{#}
+{#          alert("系统异常");#}
+{#       }#}
+{##}
+{#     },#}
+{#     error:function(data)#}
+{#     {#}
+{#       alert("系统异常");#}
+{#     }#}
+{#  });#}
+{#});#}
+{#</script>#}
+
+</body>
+</html>

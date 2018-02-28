@@ -1,0 +1,43 @@
+.clientslist{
+	margin-bottom: 100px;
+}
+#introduce_us{
+	background-color: #fff;
+	margin-top: 0px;
+}
+#info{
+	background-color: #fff;
+}
+#clients_title{
+	margin-bottom: 70px;
+}
+.panel-default>.panel-heading{
+	background-color: #f5f7fa;
+}
+.carousel-inner .img-responsive{
+	height: 400px !important;
+}
+.panel-title{
+	margin:20px;
+	font-size: 20px;
+	font-weight: 500;
+}
+.panel-brief{
+	margin-top:30px;
+	margin-bottom:60px !important;
+}
+.clients_area{
+	margin-bottom: 50px !important;
+}
+.corporate{
+	width: 150px;
+	margin:auto;
+	margin-bottom:20px; 
+}
+.clients_pics_list{
+	width: 600px !important;
+	margin: auto;
+}
+.carousel-control.left,.carousel-control.right{
+	background-image: none;
+}
