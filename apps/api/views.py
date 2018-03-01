@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import JsonResponse
 from .forms import ApiForm
-from .models import  *
+from .models import  ApiConfig,Tag,Validation
 
 # Create your views here.
 
@@ -84,3 +84,11 @@ class TestView(View):
         else:
             return JsonResponse({"status" : 1,"message" : u"测试失败"})
 
+class ApiListView(View):
+
+    def get(self,request):
+        return render(request,"data_list.html")
+
+
+def data_list(request):
+    return JsonResponse(dict(data=list(ApiConfig.objects.values('id', 'name', 'path', 'method'))))

@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 # from django.contrib import admin
-from api.views import ApiView,TestView
+from api.views import ApiView,TestView,ApiListView,data_list
 from users.views import LoginView,LogoutView
 import xadmin
 
@@ -26,7 +26,9 @@ urlpatterns = [
     url(r'^api/(?P<api_id>\w+)/$',TestView.as_view(),name="test"),
     url(r'^api/\w+/testapi$',TestView.as_view()),
     url(r'^login/$',LoginView.as_view(),name="login"),
-    url(r'^logout/$',LogoutView.as_view(),name="logout")
+    url(r'^logout/$',LogoutView.as_view(),name="logout"),
+    url(r'^apis/$',ApiListView.as_view()),
+    url(r'^list/$',data_list),
 ]
 
 # from django.conf.urls import url,include

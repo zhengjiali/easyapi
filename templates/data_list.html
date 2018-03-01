@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>api列表页</title>
+    <script language="javascript" type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+                $.ajax({
+                    type:"GET",
+                    url:'/list/',
+                    dateType:"json",
+                    success:function (result){
+                        var tbody = document.getElementsByTagName('tbody')[0];
+                        var num = result["data"].length;
+                        for(var i=0;i<num;i++){
+                            var tr = document.createElement("tr");
+                            var td0 = document.createElement("td");
+                            var tdcontent0 = document.createTextNode(result["data"][i]["id"]);
+                            td0.appendChild(tdcontent0);
+                            tr.appendChild(td0);
+                            var td = document.createElement("td");
+                            var tdcontent = document.createTextNode(result["data"][i]["name"]);
+                            td.appendChild(tdcontent);
+                            tr.appendChild(td);
+                            var td1 = document.createElement("td");
+                            var tdcontent1 = document.createTextNode(result["data"][i]["path"]);
+                            td1.appendChild(tdcontent1);
+                            tr.appendChild(td1);
+                            var td2 = document.createElement("td");
+                            var tdcontent2 = document.createTextNode(result["data"][i]["method"]);
+                            td2.appendChild(tdcontent2);
+                            tr.appendChild(td2);
+                            tbody.appendChild(tr);
+                        }
+                    }
+                })
+            })
+    </script>
+</head>
+<body>
+<h1>api list</h1>
+  	<div id="list">
+        <table class="table table_default table_choose">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th class="cols_name">接口名称</th>
+                    <th class="cols_path">请求路径</th>
+                    <th class="cols_method">请求方式</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+   </div>
+</body>
+</html>
