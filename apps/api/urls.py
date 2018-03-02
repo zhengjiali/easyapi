@@ -9,7 +9,7 @@ from .views import ApiListView,ApiView,TestView,data_list,saveconf,apis_list,Api
 urlpatterns = [
     url(r'^apis/$', apis_list),
     url(r'^(?P<api_id>\w+)/list/$',ApiConfListView.as_view()),
-    url(r'^data_list/$',data_list),
+    url(r'^cases$',data_list),
     url(r'^(?P<api_id>\w+)/$',TestView.as_view(),name="test"),
     url(r'^$',ApiView.as_view(),name="addapi"),
     url(r'^\w+/testapi$',TestView.as_view()),

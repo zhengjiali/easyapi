@@ -8,12 +8,12 @@
         $(document).ready(function () {
                 $.ajax({
                     type:"GET",
-                    url:'/api/data_list/',
+                    url:'/api/cases',
                     dateType:"json",
                     data:$('#apiId').serialize(),
                     success:function (result){
                         var tbody = document.getElementsByTagName('tbody')[0];
-                        var num = result["data"].length;
+                        var num = result["data"]["list"].length;
                         for(var i=0;i<num;i++){
                             var tr = document.createElement("tr");
                             var td0 = document.createElement("td");

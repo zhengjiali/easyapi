@@ -97,8 +97,7 @@ def data_list(request):
     api = Api.objects.get(id=apiId)
     result = {"status":0,"message":u"获取api列表成功"}
     result["data"]=dict(list=list(ApiConf.objects.filter(api=api).values('id','name','parameter')))
-    return result
-    # return JsonResponse(dict(data=list(ApiConf.objects.filter(api=api).values('id','name','parameter'))))
+    return JsonResponse(result)
 
 
 def apis_list(request):
