@@ -1,18 +1,18 @@
 # -*- coding:utf-8 -*-
 __author__ = 'zhengjiali'
 __date__ = '2018/2/26 下午10:33'
+from django.conf.urls import url
 
-# from django.conf.urls import url,include
-# from rest_framework import routers
-# from .viewsets import TagViewset,UserViewset,ApiConfigViewset
-#
-# router = routers.DefaultRouter()
-#
-# router.register(r'tags',TagViewset)
-# router.register(r'apis',ApiConfigViewset)
-# router.register(r'users',UserViewset)
-#
-# urlpatterns = [
-#     url(r'^',include(router.urls)),
-#     url(r'^api/',include('rest_framework.urls',namespace='rest_framework')),
-# ]
+from .views import ApiListView,ApiView,TestView,data_list,saveconf,apis_list,ApiConfListView
+
+
+urlpatterns = [
+    url(r'^apis/$', apis_list),
+    url(r'^(?P<api_id>\w+)/list/$',ApiConfListView.as_view()),
+    url(r'^data_list/$',data_list),
+    url(r'^(?P<api_id>\w+)/$',TestView.as_view(),name="test"),
+    url(r'^$',ApiView.as_view(),name="addapi"),
+    url(r'^\w+/testapi$',TestView.as_view()),
+    url(r'\w+/saveconf$',saveconf),
+
+]

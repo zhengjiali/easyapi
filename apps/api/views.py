@@ -69,21 +69,22 @@ class TestView(View):
         headers = request.POST.get("headers","")
         cookies = request.POST.get("cookies","")
         if parameter:
-            para = json.loads(parameter)
+            parameter = json.loads(parameter)
         if headers:
             headers = json.loads(headers)
         if cookies:
             cookies = json.loads(cookies)
         method = api.method
-        if method == 'POST':
-            r=requests.post(url,data=para,headers=headers,cookies=cookies)
-        elif method == 'GET':
-            r=requests.get(url,data=para,headers=headers,cookies=cookies)
+        if method == 'post':
+            r=requests.post(url,data=parameter,headers=headers,cookies=cookies)
+        elif method == 'get':
+            r=requests.get(url,data=parameter,headers=headers,cookies=cookies)
 
         if r.status_code == 200:
-            return JsonResponse({"status" : 0,"message" : u"测试成功","result" : r.text.decode("unicode-escape") })
+            return JsonResponse({"status" : 0,"message" : u"测试成功","result" : {"text":r.text.decode("unicode-escape"),"c":r.cookies.__str__(),"h":r.headers.__str__()}})
         else:
             return JsonResponse({"status" : 1,"message" : u"测试失败"})
+
 
 class ApiListView(View):
 
@@ -92,8 +93,16 @@ class ApiListView(View):
 
 
 def data_list(request):
-    return JsonResponse(dict(data=list(Api.objects.values('id', 'name', 'path', 'method'))))
+    apiId = request.GET.get("apiId", "")
+    api = Api.objects.get(id=apiId)
+    result = {"status":0,"message":u"获取api列表成功"}
+    result["data"]=dict(list=list(ApiConf.objects.filter(api=api).values('id','name','parameter')))
+    return result
+    # return JsonResponse(dict(data=list(ApiConf.objects.filter(api=api).values('id','name','parameter'))))
 
+
+def apis_list(request):
+    return JsonResponse(dict(data=list(Api.objects.values('id','name','method','path'))))
 
 def saveconf(request):
     if not request.user.is_authenticated():
@@ -110,4 +119,7 @@ def saveconf(request):
 
     return JsonResponse({"status":0,"message":u"保存成功！"})
 
-
+class ApiConfListView(View):
+    def get(self,request,api_id):
+        api = Api.objects.get(id=api_id)
+        return render(request,"data_list.html",{"api":api})

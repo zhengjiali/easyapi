@@ -29,7 +29,10 @@
                     {#console.log(result);//打印服务端返回的数据(调试用)#}
                     if (data.status == 0) {
                         alert("SUCCESS");
-                        $('#test1').text(data.result);
+                        $('#text').text(data.result.text);
+                        $('#cookies').text(data.result.c);
+                        $('#headers').text(data.result.h);
+
                         {#$('#test2').text(data.req);#}
                     }
                     else{
@@ -75,7 +78,13 @@
         <div class="panel-heading">
             Test Result
         </div>
-        <div class="panel-body" id="test1"></div>
+        <p>text</p>
+        <div class="panel-body" id="text"></div>
+        <p>cookies</p>
+        <div class="panel-body" id="cookies"></div>
+        <p>headers</p>
+        <div class="panel-body" id="headers"></div>
+
         <div class="panel-heading">
             Test request
         </div>

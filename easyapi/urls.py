@@ -16,20 +16,15 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 # from django.contrib import admin
-from api.views import ApiView,TestView,ApiListView,data_list,saveconf
 from users.views import LoginView,LogoutView
 import xadmin
 
 urlpatterns = [
     url(r'^admin/', xadmin.site.urls),
-    url(r'^api/$',ApiView.as_view(),name="addapi"),
-    url(r'^api/(?P<api_id>\w+)/$',TestView.as_view(),name="test"),
-    url(r'^api/\w+/testapi$',TestView.as_view()),
+    url(r'^api/',include("api.urls")),
     url(r'^login/$',LoginView.as_view(),name="login"),
     url(r'^logout/$',LogoutView.as_view(),name="logout"),
-    url(r'^apis/$',ApiListView.as_view()),
-    url(r'^list/$',data_list),
-    url(r'^api/\w+/saveconf$',saveconf),
+
 ]
 
 # from django.conf.urls import url,include
