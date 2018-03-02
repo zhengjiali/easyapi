@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 # from django.contrib import admin
-from api.views import ApiView,TestView,ApiListView,data_list
+from api.views import ApiView,TestView,ApiListView,data_list,saveconf
 from users.views import LoginView,LogoutView
 import xadmin
 
@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^logout/$',LogoutView.as_view(),name="logout"),
     url(r'^apis/$',ApiListView.as_view()),
     url(r'^list/$',data_list),
+    url(r'^api/\w+/saveconf$',saveconf),
 ]
 
 # from django.conf.urls import url,include

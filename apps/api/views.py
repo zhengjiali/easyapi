@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import JsonResponse
 from .forms import ApiForm
-from .models import  ApiConfig,Tag,Validation
+from .models import  Api,Tag,Validation,ApiConf,Character
 
 # Create your views here.
 
@@ -28,27 +28,27 @@ class ApiView(View):
             api_path = request.POST.get("path","")
             api_name = request.POST.get("name","")
             try:
-                if ApiConfig.objects.get(path=api_path) or ApiConfig.objects.get(name=api_name):
+                if Api.objects.get(path=api_path) or Api.objects.get(name=api_name):
                     return render(request,"test.html",{"msg":u"该api已存在","api_form":api_form})
             except Exception:
                 pass
 
             api_method = request.POST.get("method","")
-            api_parameter = request.POST.get("parameter","")
+            # api_parameter = request.POST.get("parameter","")
             api_description = request.POST.get("description","")
-            api_headers = request.POST.get("headers","")
+            # api_headers = request.POST.get("headers","")
             tag = request.POST.get("tag","")
-            api = ApiConfig()
+            api = Api()
             api.description = api_description
             api.path = api_path
-            api.headers = api_headers
-            api.parameter = api_parameter
+            # api.headers = api_headers
+            # api.parameter = api_parameter
             api.method = api_method
             api.name = api_name
-            api.user = User.objects.get(username='zhengjiali')
+            api.user = request.user
             api.tag = Tag.objects.get(name=tag)
             api.save()
-            if ApiConfig.objects.get(path=api_path):
+            if Api.objects.get(path=api_path):
                 return render(request,"save_sucess.html")
             else:
                 return render(request,"test.html",{"msg":u"保存失败！","api_form":api_form})
@@ -58,26 +58,27 @@ class ApiView(View):
 
 class TestView(View):
     def get(self,request,api_id):
-        api = ApiConfig.objects.get(id=api_id)
+        api = Api.objects.get(id=api_id)
         return render(request,"test2.html",{"api":api})
 
     def post(self,request):
         apiId = request.POST.get("apiId","")
-        api = ApiConfig.objects.get(id=apiId)
+        api = Api.objects.get(id=apiId)
         url = api.path
-        if not api.parameter:
-            para = ''
-        else:
-            para = json.loads(api.parameter)
-        if not api.headers:
-            headers = ''
-        else:
-            headers = json.loads(api.headers)
+        parameter = request.POST.get("parameter","")
+        headers = request.POST.get("headers","")
+        cookies = request.POST.get("cookies","")
+        if parameter:
+            para = json.loads(parameter)
+        if headers:
+            headers = json.loads(headers)
+        if cookies:
+            cookies = json.loads(cookies)
         method = api.method
-        if method == 'post':
-            r=requests.post(url,data=para,headers=headers)
-        elif method == 'get':
-            r=requests.get(url,data=para,headers=headers)
+        if method == 'POST':
+            r=requests.post(url,data=para,headers=headers,cookies=cookies)
+        elif method == 'GET':
+            r=requests.get(url,data=para,headers=headers,cookies=cookies)
 
         if r.status_code == 200:
             return JsonResponse({"status" : 0,"message" : u"测试成功","result" : r.text.decode("unicode-escape") })
@@ -91,4 +92,22 @@ class ApiListView(View):
 
 
 def data_list(request):
-    return JsonResponse(dict(data=list(ApiConfig.objects.values('id', 'name', 'path', 'method'))))
+    return JsonResponse(dict(data=list(Api.objects.values('id', 'name', 'path', 'method'))))
+
+
+def saveconf(request):
+    if not request.user.is_authenticated():
+        return render(request,"login.html")
+
+    apiId = request.POST.get("apiId","")
+    api_conf = ApiConf()
+    api_conf.api = Api.objects.get(id=apiId)
+    api_conf.headers = request.POST.get("headers","")
+    api_conf.cookies = request.POST.get("cookies","")
+    api_conf.parameter = request.POST.get("parameter","")
+    api_conf.user = request.user
+    api_conf.save()
+
+    return JsonResponse({"status":0,"message":u"保存成功！"})
+
+
