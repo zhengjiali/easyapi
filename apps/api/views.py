@@ -122,3 +122,6 @@ class ApiConfListView(View):
     def get(self,request,api_id):
         api = Api.objects.get(id=api_id)
         return render(request,"data_list.html",{"api":api})
+
+def get_tags(request):
+    return JsonResponse(dict(data=list(Tag.objects.filter(deleted=0).values('id','name','father_id','create_time'))))
