@@ -7,22 +7,27 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50,verbose_name=u"标签名")
-    father_id = models.IntegerField(default=0,verbose_name=u"上一级标签id")
+
+class Proj(models.Model):
+    name = models.CharField(max_length=50,verbose_name=u"项目名称")
+    father_id = models.IntegerField(default=0,verbose_name=u"上一级项目id")
     deleted = models.IntegerField(default=0,verbose_name=u"是否删除")
     create_time = models.DateTimeField(default=datetime.now,verbose_name=u"创建时间")
 
-    class Meta:
-        verbose_name = u"标签"
-        verbose_name_plural = verbose_name
+    def natural_key(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = u"项目名"
+        verbose_name_plural = verbose_name
 
-class Character(models.Model):
-    name = models.CharField(max_length=50,verbose_name=u"特性名称")
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=50,verbose_name=u"标签名称")
     deleted = models.IntegerField(default=0,verbose_name=u"是否删除")
     create_time = models.DateField(default=datetime.now,verbose_name=u"创建时间")
 
@@ -39,7 +44,7 @@ class Api(models.Model):
     method = models.CharField(max_length=10,choices=(("get","get"),("post","post"),("put","put")))
     name = models.CharField(max_length=20,verbose_name=u"api名称")
     description = models.CharField(max_length=200,verbose_name=u"api描述",null=True,blank=True)
-    tag = models.ForeignKey(Tag,verbose_name=u"api所属标签")
+    proj = models.ForeignKey(Proj,verbose_name=u"所属项目")
     user = models.ForeignKey(User,verbose_name=u"创建人")
     create_time = models.DateTimeField(default=datetime.now,verbose_name=u"创建时间")
     update_time = models.DateTimeField(default=datetime.now,verbose_name=u"修改时间")
@@ -52,14 +57,21 @@ class Api(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_all_case(self):
+        return self.case_set.all()
 
-class ApiConf(models.Model):
-    name = models.CharField(max_length=50,verbose_name=u"case名称")
+    def get_username(self):
+        return User.objects.get(kw=self.user)
+
+
+class Case(models.Model):
+    name = models.CharField(max_length=50,verbose_name=u"用例名称")
     headers = models.CharField(max_length=600,null=True,blank=True)
     cookies = models.CharField(max_length=600,null=True,blank=True)
     parameter = models.CharField(max_length=200,null=True,blank=True)
     api = models.ForeignKey(Api,verbose_name=u"所属api")
-    character = models.ManyToManyField(Character)
+    tag = models.ForeignKey(Tag,null=True,blank=True,verbose_name=u"用例标签")
+    validation = models.CharField(max_length=200,null=True,blank=True)
     user = models.ForeignKey(User, verbose_name=u"创建人")
     create_time = models.DateTimeField(default=datetime.now, verbose_name=u"创建时间")
     update_time = models.DateTimeField(default=datetime.now, verbose_name=u"修改时间")
@@ -74,13 +86,15 @@ class ApiConf(models.Model):
         return self.name
 
 
-class Validation(models.Model):
-    key = models.CharField(max_length=200,verbose_name=u"验证关键字")
-    value = models.CharField(max_length=200,verbose_name=u"验证值")
-    api_id = models.IntegerField(verbose_name=u"验证接口id")
+class result(models.Model):
+    case = models.ForeignKey(Case,verbose_name=u"测试用例")
+    status_code = models.IntegerField(verbose_name=u"响应状态码")
+    response = models.TextField(verbose_name=u'响应结果')
+    is_pass = models.IntegerField(default=0,verbose_name=u'0：默认不填写，1：通过，-1：不通过')
+    task_id = models.IntegerField(default=0,verbose_name=u'0：测试，其他：任务id')
 
     class Meta:
-        verbose_name = u"API校验"
+        verbose_name = u"测试结果"
         verbose_name_plural = verbose_name
 
     def __unicode__(self):

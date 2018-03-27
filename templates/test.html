@@ -12,7 +12,7 @@
     <a class="fr" href="{% url 'logout' %}">退出</a>
 </div>
 <div class="content">
-    <form action="{% url 'addapi' %}" method="post" autocomplete="off">
+    <form id="form1" autocomplete="off">
         <div class="form-group marb20 {% if api_form.errors.path %}errorput{% endif %}">
             <label>路径</label>
             <input name="path" id="path" type="text" value="{{ api_form.path.value }}" placeholder="请求路径"/>
@@ -43,8 +43,7 @@
         </div>
         <div class="error btns login-form-tips" id="jsLoginTips">{% if msg %}{{ msg }}{% else %}{% for key,error in api_form.errors.items %}{{ error }}{% endfor %}{% endif %}</div>
 
-        <input class="btn btn-green" id="jsLoginBtn" type="submit" value="保存" />
-        {% csrf_token %}
+        <button class="btn btn-green" id="btnSave" type="button" >保 存</button>
     </form>
     <button type="button" class="btn btn-default" ">test</button>
     <div class="panel panel-default">
@@ -54,30 +53,47 @@
         </div>
     </div>
 </div>
+<script src="/static/dist/js/jquery2.min.js"></script>
 <script type="text/javascript">
-  $("button").click(function (){
-  $.ajax({
-    url:'http://127.0.0.1:8000/api/black_api/',
-    type : "Get",
-    data: {"type":0},
-    dataType : "json",
-    success:function(data)
-    {
-      if(data.status===0){
-        var data1="";
-        data1 = JSON.stringify(data);
-        $("#test1").text(data1);
-      }else{
-        $("#test1").text("查询失败");
-      }
+$('#btnSave').click(function(event) {
 
-    },
-    error:function(data)
-    {
-      $("#test1").text("查询失败");
-    }
-  });
-} )
+    $.ajax({
+        url: 'http://172.19.162.104:8000/api/',
+        type: "POST",
+        data: $("#form1").serialize(),
+        dataType: "json",
+        success: function (data)
+        {
+            alert(data["msg"]);
+        },
+        error: function (data) {
+            alert("系统异常");
+        }
+    });
+});
+{#  $("button").click(function (){#}
+{#  $.ajax({#}
+{#    url:'http://127.0.0.1:8000/api/black_api/',#}
+{#    type : "Get",#}
+{#    data: {"type":0},#}
+{#    dataType : "json",#}
+{#    success:function(data)#}
+{#    {#}
+{#      if(data.status===0){#}
+{#        var data1="";#}
+{#        data1 = JSON.stringify(data);#}
+{#        $("#test1").text(data1);#}
+{#      }else{#}
+{#        $("#test1").text("查询失败");#}
+{#      }#}
+{##}
+{#    },#}
+{#    error:function(data)#}
+{#    {#}
+{#      $("#test1").text("查询失败");#}
+{#    }#}
+{#  });#}
+{#} )#}
 </script>
 </body>
 </html>

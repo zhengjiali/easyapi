@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'media'))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-
+APPEND_SLASH=False
 LOGIN_URL='/login/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -30,7 +30,7 @@ SECRET_KEY = 'ylx$@b%)le0+#09g&l=ujyxlii5kh26)s(lo%41veo*x$t6hlj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','172.19.162.104','localhost']
 
 
 # Application definition
@@ -46,18 +46,31 @@ INSTALLED_APPS = [
     'api',
     'xadmin',
     'crispy_forms',
+    'corsheaders',
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'http://172.19.162.148:8000',
+
+
+)
+# If True, cookies will be allowed to be included in cross-site HTTP requests. Defaults to False.
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'easyapi.urls'
 
@@ -94,8 +107,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME':'easyapi',
-        'USER':'xxx',
-        'PASSWORD':'xxx',
+        'USER':'root',
+        'PASSWORD':'qiqimercy',
         'HOST':'localhost',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },

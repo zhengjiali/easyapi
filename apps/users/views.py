@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from .forms import *
 from django.contrib.auth.backends import ModelBackend
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 
 
 # Create your views here.
@@ -33,11 +33,14 @@ class LoginView(View):
             user = authenticate(username=name,password=passwd)
             if user is not None:
                 login(request, user)
-                return render(request, "test.html",{"user":user})
+                # return render(request, "test.html",{"user":user})
+                return JsonResponse({"status":0,"msg":u"登陆成功"})
             else:
-                return render(request, "login.html", {"login_form": login_form, "msg": u"用户名密码错误"})
+                # return render(request, "login.html", {"login_form": login_form, "msg": u"用户名密码错误"})
+                return JsonResponse({"status":1,"msg":u"登陆失败"})
+
         else:
-            return render(request, "login.html", {"login_form": login_form})
+            return JsonResponse({"status":1,"msg":u"登陆失败","login_form":login_form})
 
 class LogoutView(View):
     def get(self,request):
