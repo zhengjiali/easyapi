@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import JsonResponse,HttpResponse
 from .forms import *
-from .models import  Api,Tag,Case,Proj
+from .models import  Api,Tag,Case,Proj,Result
 
 def dealParam(parameter):
     if parameter:
@@ -17,6 +17,19 @@ def dealParam(parameter):
             l = p.split('=')
             data[l[0]] = l[1]
         return data
+
+def save_result(r,case):
+    result = Result()
+    result.case = case
+    result.headers = r.headers.__str__()
+    result.cookies = r.cookies.__str__()
+    result.response = r.text.decode("unicode-escape")
+    result.status_code = r.status_code
+    result.request_headers = r.request.headers.__str__()
+    result.save()
+
+
+
 
 class CaseTestView(View):
     def get(self,request,case_id):
@@ -49,6 +62,7 @@ class CaseTestView(View):
             r=requests.post(url,data=parameter,headers=headers,cookies=cookies)
         elif method == 'get':
             r=requests.get(url+'?'+parameter,headers=headers,cookies=cookies)
+        save_result(r,case)
 
         if r.status_code == 200:
             return JsonResponse({"status" : 0,"message" : u"测试成功","result" : {"text":r.text.decode("unicode-escape"),"c":r.cookies.__str__(),"h":r.headers.__str__()}})
