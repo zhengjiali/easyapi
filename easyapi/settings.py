@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 """
 Django settings for easyapi project.
 
@@ -19,8 +21,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'media'))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
-APPEND_SLASH=False
-LOGIN_URL='/login/'
+# 当url缺少斜杠时，自动拼上，并重定向
+APPEND_SLASH=True
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -47,6 +49,7 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'corsheaders',
+    'task',
 ]
 
 MIDDLEWARE_CLASSES = [

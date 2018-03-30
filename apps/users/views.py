@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate,login,logout
 from .forms import *
 from django.contrib.auth.backends import ModelBackend
 from django.http import HttpResponseRedirect,JsonResponse
-
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 
@@ -47,3 +47,20 @@ class LogoutView(View):
         logout(request)
         from django.core.urlresolvers import reverse
         return HttpResponseRedirect(reverse('login'))
+
+
+def login_required(function):
+    """
+    Decorator for views that checks that the user is logged in, redirecting
+    to the log-in page if necessary.
+    """
+    def inner(request,*args,**kwargs):
+        if not request.user.is_authenticated():
+            return render(request,"login.html")
+        return function(request,*args,**kwargs)
+    return inner
+
+class LoginRequiredView(object):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredView, self).dispatch(request, *args, **kwargs)
