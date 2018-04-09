@@ -37,16 +37,16 @@ class LoginView(View):
                 return JsonResponse({"status":0,"msg":u"登陆成功"})
             else:
                 # return render(request, "login.html", {"login_form": login_form, "msg": u"用户名密码错误"})
-                return JsonResponse({"status":1,"msg":u"登陆失败"})
+                return JsonResponse({"status":1,"msg":u"用户名或密码错误"})
 
         else:
-            return JsonResponse({"status":1,"msg":u"登陆失败","login_form":login_form})
+            return JsonResponse({"status":1,"msg":u"请填写用户名密码"})
 
 class LogoutView(View):
-    def get(self,request):
+    def post(self,request):
         logout(request)
         from django.core.urlresolvers import reverse
-        return HttpResponseRedirect(reverse('login'))
+        return render(request,'login.html')
 
 
 def login_required(function):

@@ -21,9 +21,9 @@ class ProjAdmin(object):
     list_filter = ['name','father_id','create_time']
 
 class ApiAdmin(object):
-    list_display = ['path','method','name','description','proj','user']
-    search_fields = ['path','method','name','description','proj','user']
-    list_filter = ['path','method','name','description','proj','user']
+    list_display = ['path','method','name','description','proj','user','update_time']
+    search_fields = ['path','method','name','description','proj','user','update_time']
+    list_filter = ['path','method','name','description','proj','user','update_time']
 
 
 class CaseAdmin(object):

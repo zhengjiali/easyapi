@@ -14,6 +14,29 @@ from django.contrib.auth.models import User
 
 PER_PAGE_COUNT=10
 
+# @login_required #todo
+def api_list(request):
+    '''
+    api列表渲染页面
+    :param request:
+    :return:
+    '''
+    if request.method == 'GET':
+        projs = Proj.objects.filter(deleted=0)
+        apis = Api.objects.filter(is_deleted=0).order_by('-update_time')
+        return render(request,'api_list.html',{"projs":projs,"apis":apis}) #todo
+
+@login_required #todo
+def edit_api(request,api_id):
+    '''
+    api编辑渲染页面
+    :param request:
+    :return:
+    '''
+    if request.method == 'GET':
+        api = Api.objects.get(id=int(api_id))
+        projs = Proj.objects.filter(deleted=0).order_by("id")
+        return render(request,'api_edit.html',{"api":api,'projs':projs})
 
 
 def saveParam(parameter):
@@ -69,7 +92,7 @@ class ApiView(View):
 class ApiNewView(View): #todo 添加权限验证
     def get(self,request):
         projs = Proj.objects.all()
-        return render(request,"new_api.html",{"user":request.user,"projs":projs})
+        return render(request,"api_add.html",{"user":request.user,"projs":projs})
 
     def post(self,request):
         '''
@@ -113,19 +136,18 @@ class ApiNewView(View): #todo 添加权限验证
             return JsonResponse({"msg":u"验证失败","status":3})
 
 class ApiQueryView(View):
-
     def get(self,request):
-        api_all = Api.objects.all()
+        api_all = Api.objects.filter(is_deleted=0)
         count = Api.objects.count()
         sortType = request.GET.get("sortType","desc")
-        pj = request.GET.get("project",0)
+        pj = request.GET.get("project","")
         kw = request.GET.get("kw","")
         page = request.GET.get('currPage',1)
-        if pj!= 0:
+        if pj!= "":
             proj = Proj.objects.get(id=int(pj))
-            apis = api_all.filter(proj=proj,is_deleted=0)
+            apis = api_all.filter(proj=proj)
         else:
-            apis = api_all.filter(is_deleted=0)
+            apis = api_all
         if sortType == 'desc':
             apis = apis.order_by("-update_time")
         elif sortType == 'asc':

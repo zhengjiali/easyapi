@@ -111,7 +111,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME':'easyapi',
         'USER':'root',
-        'PASSWORD':'qiqimercy',
+        'PASSWORD':'123456',
         'HOST':'localhost',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },
