@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 
 PER_PAGE_COUNT=10
 
-# @login_required #todo
+@login_required
 def api_list(request):
     '''
     api列表渲染页面
@@ -26,7 +26,7 @@ def api_list(request):
         apis = Api.objects.filter(is_deleted=0).order_by('-update_time')
         return render(request,'api_list.html',{"projs":projs,"apis":apis}) #todo
 
-@login_required #todo
+@login_required
 def edit_api(request,api_id):
     '''
     api编辑渲染页面
@@ -80,7 +80,7 @@ def get_slice(count,page):
 
     return (lowpos,highpos)
 
-class ApiView(View):
+class ApiView(LoginRequiredView,View):
     def get(self,request,api_id):
         api = Api.objects.get(id=int(api_id))
         cases = api.get_all_case()
@@ -89,7 +89,7 @@ class ApiView(View):
         data["cases"]=allcase
         return JsonResponse(data)
 
-class ApiNewView(View): #todo 添加权限验证
+class ApiNewView(LoginRequiredView,View):
     def get(self,request):
         projs = Proj.objects.all()
         return render(request,"api_add.html",{"user":request.user,"projs":projs})
@@ -126,7 +126,9 @@ class ApiNewView(View): #todo 添加权限验证
             api.name = api_name
             api.proj = project
             api.user = request.user
-            # api.user = User.objects.get(id=1) #todo 注释
+<<<<<<< HEAD
+=======
+>>>>>>> fdc637976d207a67966c206906433260091a86f3
             try:
                 api.save()
                 return JsonResponse({"msg":u"保存成功","status":0})
@@ -135,7 +137,7 @@ class ApiNewView(View): #todo 添加权限验证
         else:
             return JsonResponse({"msg":u"验证失败","status":3})
 
-class ApiQueryView(View):
+class ApiQueryView(LoginRequiredView,View):
     def get(self,request):
         api_all = Api.objects.filter(is_deleted=0)
         count = Api.objects.count()
@@ -169,7 +171,7 @@ def data_list(request):
     return JsonResponse(result)
 
 
-class CaseNewView(View): #todo 增加权限LoginRequiredView
+class CaseNewView(LoginRequiredView,View):
     def get(self,request,api_id):
         api = Api.objects.get(id=int(api_id))
         return render(request,"data_list.html",{"api":api})
@@ -198,8 +200,7 @@ class CaseNewView(View): #todo 增加权限LoginRequiredView
                     return JsonResponse({"msg":u"该用例已存在","status":2})
                 case = Case()
             case.name = case_name
-            # case.user = request.user
-            case.user = User.objects.get(id=1) #todo 注释
+            case.user = request.user
             case.api = case_api
             case.headers = case_headers
             case.cookies = case_cookies
@@ -217,7 +218,7 @@ class CaseNewView(View): #todo 增加权限LoginRequiredView
         else:
             return JsonResponse({"msg":u"校验失败","status":4})
 
-# @login_required  #todo
+@login_required
 def get_api_cases(request,api_id):
     if request.method == 'GET':
         api = Api.objects.filter(id=int(api_id),is_deleted=0)
