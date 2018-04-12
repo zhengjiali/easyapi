@@ -126,9 +126,6 @@ class ApiNewView(LoginRequiredView,View):
             api.name = api_name
             api.proj = project
             api.user = request.user
-<<<<<<< HEAD
-=======
->>>>>>> fdc637976d207a67966c206906433260091a86f3
             try:
                 api.save()
                 return JsonResponse({"msg":u"保存成功","status":0})
