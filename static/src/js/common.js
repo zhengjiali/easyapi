@@ -37,7 +37,7 @@ function log_off(){
       if (Status==0){
         let url = data["url"];
         window.location.href=url;
-      }
+       }
 
       else{
         $("#error_mess").html("系统异常！");

@@ -46,7 +46,7 @@ class LogoutView(View):
     def post(self,request):
         logout(request)
         from django.core.urlresolvers import reverse
-        return render(request,'login.html')
+        return JsonResponse({"status":0,"msg":"退出成功！","url":"http://127.0.0.1:8000/login/"})
 
 
 def login_required(function):

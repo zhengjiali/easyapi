@@ -125,8 +125,8 @@ class ApiNewView(View): #todo 添加权限验证
             api.method = api_method.lower()
             api.name = api_name
             api.proj = project
-            # api.user = request.user
-            api.user = User.objects.get(id=1) #todo 注释
+            api.user = request.user
+            # api.user = User.objects.get(id=1) #todo 注释
             try:
                 api.save()
                 return JsonResponse({"msg":u"保存成功","status":0})

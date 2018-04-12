@@ -1,0 +1,33 @@
+.main_content,.main_search{
+	width: 1250px;
+	margin:10px auto;
+	position: relative;
+}
+.content{
+	margin-bottom: 20px;
+}
+.main_search{
+	min-height: 70px;
+	margin-bottom: 10px;
+/*	background: #f7f7f7;
+*/	padding-top: 10px;
+}
+.jumbotron{
+	background: #f7f7f7;
+	margin-bottom: 25px;
+	padding: 40px 60px;
+}
+.jumbotron p{
+	margin-bottom: 5px;
+	font-size: 20px;
+}
+.jumbotron h3{
+	margin-top: 0px;
+}
+.api_testcase_btn{
+	width: 100px;
+	margin-top: 15px;
+}
+.center_content_table{
+	min-height: 200px;
+}
