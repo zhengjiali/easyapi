@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^api/',include("api.urls",namespace='api')),
     url(r'^login/$',LoginView.as_view(),name="login"),
     url(r'^logout/$',LogoutView.as_view(),name="logout"),
-    url(r'^projs/$',get_projects)
+    url(r'^projs/$',get_projects),
+    url(r'^plan/',include("task.urls",namespace='plan')),
 
 ]
 
