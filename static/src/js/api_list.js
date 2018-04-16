@@ -76,7 +76,7 @@ function createTable(currPage,limit, totalCount, data) {
         html.push('<td>'+data[i].method+'</td>');
         html.push('<td>'+data[i].path+'</td>');
         html.push('<td>'+data[i].update_time+'</td>');
-        html.push('<td><button type="button" class="btn btn-link " id="account_pwd_reset'+i+'" style="outline:none;width:58px;height: 23px; padding:0px;margin-right:10px" onClick="apiEdit(this)">编辑</button><button type="button" class="btn btn-link process_delete" id="delete_account'+i+'" style="outline:none;width:43px;height: 23px; padding:0px;" onClick="noticeDelete(this)">删除</button></td>');
+        html.push('<td><button type="button" class="btn btn-link " style="outline:none;width:38px;height: 23px; padding:0px;" onClick="apiEdit(this)">编辑</button><button type="button" class="btn btn-link process_delete" style="outline:none;width:38px;height: 23px; padding:0px;" onClick="apiDelete(this)">删除</button><button type="button" class="btn btn-link process_delete" style="outline:none;width:38px;height: 23px; padding:0px;" onClick="apiTestCase(this)">用例管理</button></td>');
         html.push('</tr>');
       }
     }
