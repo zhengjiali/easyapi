@@ -10,4 +10,5 @@ urlpatterns = [
     # url(r'^plan$', planQueryView.as_view(),name="query"),
     url(r'^(?P<plan_id>\w+)$', get_plan),
     url(r'^add/$',new_plan),
+    url(r'^(?P<plan_id>\w+)/exec$',TaskView.as_view(),name='execTask'),
 ]

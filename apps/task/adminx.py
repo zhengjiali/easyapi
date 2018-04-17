@@ -20,6 +20,12 @@ class planAdmin(object):
     search_fields = ['name','create_time']
     list_filter = ['name','create_time']
 
+class runtime_envAdmin(object):
+    list_display = ['name','uri','is_deleted']
 
+class taskAdmin(object):
+    list_display = ['plan','status','runtime_env']
 
 xadmin.site.register(plan,planAdmin)
+xadmin.site.register(runtime_env,runtime_envAdmin)
+xadmin.site.register(task,taskAdmin)

@@ -87,9 +87,9 @@ class Api(models.Model):
 
 class Case(models.Model):
     name = models.CharField(max_length=50,verbose_name=u"用例名称")
-    headers = models.CharField(max_length=600,null=True,blank=True)
-    cookies = models.CharField(max_length=600,null=True,blank=True)
-    parameter = models.CharField(max_length=200,null=True,blank=True)
+    headers = models.TextField(null=True,blank=True)
+    cookies = models.TextField(null=True,blank=True)
+    parameter = models.TextField(null=True,blank=True)
     api = models.ForeignKey(Api,verbose_name=u"所属api")
     tag = models.ForeignKey(Tag,null=True,blank=True,verbose_name=u"用例标签")
     validation = models.CharField(max_length=200,null=True,blank=True)
@@ -126,6 +126,7 @@ class Case(models.Model):
 
 class Result(models.Model):
     case = models.ForeignKey(Case,verbose_name=u"测试用例")
+    url = models.CharField(max_length=200,verbose_name=u'请求url',default='')
     status_code = models.IntegerField(verbose_name=u"响应状态码")
     response = models.TextField(verbose_name=u'响应结果')
     request_headers = models.TextField(default='',verbose_name=u'请求头信息')

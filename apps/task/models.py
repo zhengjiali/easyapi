@@ -54,3 +54,24 @@ class plan(models.Model):
             _dict[field] = _value
         return _dict
 
+class runtime_env(models.Model):
+    name = models.CharField(max_length=20,verbose_name=u'环境名')
+    uri = models.CharField(max_length=50,verbose_name=u'环境路径')
+    is_deleted = models.IntegerField(default=0, verbose_name=u"是否删除")
+
+    class Meta:
+        verbose_name = u'执行环境'
+        verbose_name_plural = verbose_name
+
+class task(models.Model):
+    headers = models.TextField(default='', verbose_name=u'头信息')
+    cookies = models.TextField(default='', verbose_name=u'cookies')
+    status = models.IntegerField(default=0,verbose_name=u'0:执行中，1：执行结束')
+    plan = models.ForeignKey(plan)
+    runtime_env = models.ForeignKey(runtime_env)
+    create_time = models.DateTimeField(default=datetime.datetime.now, verbose_name=u"创建时间")
+    update_time = models.DateTimeField(verbose_name=u"修改时间", auto_now=True)
+
+    class Meta:
+        verbose_name = u'执行'
+        verbose_name_plural = verbose_name

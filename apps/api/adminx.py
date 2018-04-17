@@ -27,7 +27,7 @@ class ApiAdmin(object):
 
 
 class CaseAdmin(object):
-    list_display = ['name','parameter','api','tag']
+    list_display = ['id','name','parameter','api','tag']
     search_fields = ['name','parameter','api','tag']
     list_filter = ['name','parameter','api','tag']
 
@@ -36,6 +36,10 @@ class TagAdmin(object):
     search_fields = ['name']
     list_filter = ['name']
 
+class ResultAdmin(object):
+    list_display = ['case','url','status_code','response']
+    search_fields = ['case']
+    list_filter = ['case']
 
 xadmin.site.register(Proj,ProjAdmin)
 xadmin.site.register(Api,ApiAdmin)
@@ -43,3 +47,4 @@ xadmin.site.register(views.BaseAdminView,BaseSetting)
 xadmin.site.register(views.CommAdminView,GlobalSettings)
 xadmin.site.register(Case,CaseAdmin)
 xadmin.site.register(Tag,TagAdmin)
+xadmin.site.register(Result,ResultAdmin)
