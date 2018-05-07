@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 
 PER_PAGE_COUNT=10
 
-@login_required
+# @login_required #todo
 def api_list(request):
     '''
     api列表渲染页面
@@ -26,7 +26,7 @@ def api_list(request):
         apis = Api.objects.filter(is_deleted=0).order_by('-update_time')
         return render(request,'api_list.html',{"projs":projs,"apis":apis}) #todo
 
-@login_required
+@login_required #todo
 def edit_api(request,api_id):
     '''
     api编辑渲染页面
@@ -80,7 +80,7 @@ def get_slice(count,page):
 
     return (lowpos,highpos)
 
-class ApiView(LoginRequiredView,View):
+class ApiView(View):
     def get(self,request,api_id):
         api = Api.objects.get(id=int(api_id))
         cases = api.get_all_case()
@@ -89,7 +89,7 @@ class ApiView(LoginRequiredView,View):
         data["cases"]=allcase
         return JsonResponse(data)
 
-class ApiNewView(LoginRequiredView,View):
+class ApiNewView(View): #todo 添加权限验证
     def get(self,request):
         projs = Proj.objects.all()
         return render(request,"api_add.html",{"user":request.user,"projs":projs})
@@ -126,6 +126,7 @@ class ApiNewView(LoginRequiredView,View):
             api.name = api_name
             api.proj = project
             api.user = request.user
+            # api.user = User.objects.get(id=1) #todo 注释
             try:
                 api.save()
                 return JsonResponse({"msg":u"保存成功","status":0})
@@ -134,7 +135,7 @@ class ApiNewView(LoginRequiredView,View):
         else:
             return JsonResponse({"msg":u"验证失败","status":3})
 
-class ApiQueryView(LoginRequiredView,View):
+class ApiQueryView(View):
     def get(self,request):
         api_all = Api.objects.filter(is_deleted=0)
         count = Api.objects.count()
@@ -168,12 +169,22 @@ def data_list(request):
     return JsonResponse(result)
 
 
-class CaseNewView(LoginRequiredView,View):
+class CaseNewView(View): #todo 增加权限LoginRequiredView
+    #dean 修改渲染新增接口用例界面接口(获取更多信息)2018-05-07 -- start --
     def get(self,request,api_id):
-        api = Api.objects.get(id=int(api_id))
-        return render(request,"data_list.html",{"api":api})
+        # api = Api.objects.get(id=int(api_id))
+        # return render(request,"data_list.html",{"api":api})
+        if request.method == 'GET':
+            api = Api.objects.filter(id=int(api_id),is_deleted=0)
+            if api:
+                apis = api[0].get_values("id", "name", "path", "method", "proj","description")
+                #此处获取tag_id# 并渲染至界面，界面先默认传1/2，用例类型数据默认为： api接口：101，其他102
+                return render(request,'api_testcase_add.html',{"api":apis})
+            else:
+                return render(request,'wrong.html')
+    #dean 修改渲染新增接口用例界面接口(获取更多信息)2018-05-07 -- end --
 
-    def post(self,request,api_id):
+    def post(self,request):
         case_form = CasenameForm(request.POST)
         if case_form.is_valid():
             if not Api.objects.filter(id=int(api_id),is_deleted=0):
@@ -197,7 +208,8 @@ class CaseNewView(LoginRequiredView,View):
                     return JsonResponse({"msg":u"该用例已存在","status":2})
                 case = Case()
             case.name = case_name
-            case.user = request.user
+            # case.user = request.user
+            case.user = User.objects.get(id=1) #todo 注释
             case.api = case_api
             case.headers = case_headers
             case.cookies = case_cookies
@@ -215,16 +227,32 @@ class CaseNewView(LoginRequiredView,View):
         else:
             return JsonResponse({"msg":u"校验失败","status":4})
 
-@login_required
-def get_api_cases(request,api_id):
+# @login_required  #todo
+#dean 修改渲染接口用例列表界面接口2018-05-07 -- start --
+def get_testcases(request,api_id):
     if request.method == 'GET':
         api = Api.objects.filter(id=int(api_id),is_deleted=0)
         if api:
-            apis = api[0].get_values("id", "name", "path", "method", "proj")
-            cases = [ i.get_values("id",'name','tag','headers','cookies','parameter','user','update_time','validation') for i in api[0].get_all_case() ]
-            return JsonResponse({"cases": cases,"api":apis})
+            apis = api[0].get_values("id", "name", "path", "method", "proj","description")
+            return render(request,'api_testcase.html',{"api":apis})
         else:
             return render(request,'wrong.html')
+#dean 修改渲染接口用例列表界面接口2018-05-07 -- end --
+
+# @login_required  #todo
+#dean 新增获取用例列表接口2018-05-07 -- start --
+def get_caseslist(request):
+    if request.method == 'GET':
+        api_id = request.GET.get("id",'')
+        if api_id is None:
+            return render(request,'wrong.html')
+        api = Api.objects.filter(id=int(api_id),is_deleted=0)
+        if api:
+            cases = [ i.get_values("id",'name','tag','headers','cookies','parameter','user','update_time','validation') for i in api[0].get_all_case() ]
+            return JsonResponse({"cases": cases})
+        else:
+            return render(request,'wrong.html')
+#dean 新增获取用例列表接口2018-05-07 -- end --
 
 
 # @login_required

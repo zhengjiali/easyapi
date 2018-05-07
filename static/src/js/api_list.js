@@ -95,3 +95,8 @@ function apiEdit(id){
     var api_id = $(id).parent().parent().children().eq(0).attr("id");
       window.location.href = "/api/"+api_id+"/edit/";
 }
+//跳转用例管理界面
+function apiTestCase(id){
+    var api_id = $(id).parent().parent().children().eq(0).attr("id");
+      window.location.href = "/api/"+api_id+"/cases/";
+}
