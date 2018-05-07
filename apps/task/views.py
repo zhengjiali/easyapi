@@ -5,9 +5,9 @@ from api.models import Case
 from django.http import JsonResponse
 from django.views.generic.base import View
 from django.contrib.auth.models import User
-from api.test_views import test_case,save_result
+from api.test_views import test_case,save_result,save_exception
 from users.views import login_required,LoginRequiredView
-
+from tasks import execute
 # Create your views here.
 
 def new_plan(request):
@@ -46,11 +46,12 @@ def get_plan(request,plan_id):
         return JsonResponse({"msg":e.message,"status":0})
 
 
-def save_task(plan_id):
+def save_task(request,plan_id):
     t = task()
     t.plan = plan.objects.get(id=int(plan_id))
     t.runtime_env = runtime_env.objects.get(id=1)
     t.status=0
+    t.user = request.user
     t.save()
     t.plan.task_count += 1
     t.plan.save()
@@ -58,22 +59,37 @@ def save_task(plan_id):
     # return JsonResponse({"msg":'sucess','status':0})
 
 def execute_task(task_id):
-    try:
-        t = task.objects.get(id=task_id)
-        p = t.plan
-        e = t.runtime_env
-        for case in p.cases.all():
-            r = test_case(e.id,case)
-            save_result(r,case,task_id)
-        t.status=1
-        t.save()
-        return t.status
+    t = task.objects.get(id=task_id)
+    p = t.plan
+    env = t.runtime_env
+    for case in p.cases.all():
+        try:
+            r = test_case(env.id, case)
+            save_result(r, case, task_id)
+        except Exception as e:
+            print "Exception...."
+            print e.message
+            save_exception(e, case, task_id)
+            continue
+    t.status = 1
+    t.save()
+    return t.status
 
-    except Exception as e:
-        return t.status
+    # except Exception as e2:
+    #     print 'e2...'
+    #     print e2.message
+    #     return -1
+
+
 
 class TaskView(View):
     def post(self,request,plan_id):
-        task_id = save_task(plan_id)
+        task_id = save_task(request,plan_id)
         status = execute_task(task_id)
         return JsonResponse({"status":status})
+
+class ExecTask(View):
+    def post(self,request,plan_id):
+        task_id = save_task(request,plan_id)
+        execute.delay(task_id)
+        return JsonResponse({"status":"sucess","task_id":task_id})

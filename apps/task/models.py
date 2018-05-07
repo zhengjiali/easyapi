@@ -68,6 +68,7 @@ class task(models.Model):
     cookies = models.TextField(default='', verbose_name=u'cookies')
     status = models.IntegerField(default=0,verbose_name=u'0:执行中，1：执行结束')
     plan = models.ForeignKey(plan)
+    user = models.ForeignKey(User,null=True,blank=True)
     runtime_env = models.ForeignKey(runtime_env)
     create_time = models.DateTimeField(default=datetime.datetime.now, verbose_name=u"创建时间")
     update_time = models.DateTimeField(verbose_name=u"修改时间", auto_now=True)

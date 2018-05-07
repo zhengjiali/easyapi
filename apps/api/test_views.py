@@ -19,13 +19,21 @@ def dealParam(parameter):
 def save_result(r,case,task_id):
     result = Result()
     result.case = case
-    result.headers = r.headers.__str__()
-    result.cookies = r.cookies.__str__()
+    result.request_headers = r.headers.__str__()
+    result.response_cookies = r.cookies.__str__()
     result.response = r.text.decode("unicode-escape")
     result.status_code = r.status_code
     result.request_headers = r.request.headers.__str__()
     result.url = r.url
     result.task_id = task_id
+    result.save()
+
+def save_exception(e,case,task_id):
+    result = Result()
+    result.case = case
+    result.status_code = 0
+    result.task_id = task_id
+    result.desp = e.message
     result.save()
 
 def test_case(env_id,case):
