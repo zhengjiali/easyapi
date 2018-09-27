@@ -15,6 +15,12 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 import os
 import sys
 
+
+# 配置celery
+import djcelery
+djcelery.setup_loader()
+CELERY_BROKER_URL= 'localhost'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -48,8 +54,9 @@ INSTALLED_APPS = [
     'api',
     'xadmin',
     'crispy_forms',
-    'corsheaders',
+#     'corsheaders',
     'task',
+    'djcelery',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -57,8 +64,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    'corsheaders.middleware.CorsPostCsrfMiddleware',
+#     'corsheaders.middleware.CorsMiddleware',
+#     'corsheaders.middleware.CorsPostCsrfMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -110,9 +117,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME':'easyapi',
-        'USER':'root',
-        'PASSWORD':'qiqimercy',
-        'HOST':'localhost',
+        'USER':'tcredit_tester',
+        'PASSWORD':'tcredit0401',
+        'HOST':'172.19.160.185',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },
     }

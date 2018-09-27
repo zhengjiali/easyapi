@@ -5,7 +5,6 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-
 # Create your models here
 
 class Proj(models.Model):
@@ -16,6 +15,9 @@ class Proj(models.Model):
 
     def natural_key(self):
         return self.name
+
+    def get_all_env(self):
+        return self.runtime_env_set.filter(is_deleted=0)
 
     def __unicode__(self):
         return self.name
@@ -28,7 +30,7 @@ class Proj(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=50,verbose_name=u"标签名称")
-    deleted = models.IntegerField(default=0,verbose_name=u"是否删除")
+    is_deleted = models.IntegerField(default=0,verbose_name=u"是否删除")
     create_time = models.DateField(default=datetime.datetime.now,verbose_name=u"创建时间")
 
     class Meta:
@@ -77,7 +79,7 @@ class Api(models.Model):
                     _value = _value.username
 
             elif field in ('create_time','update_time'):
-                _value = (_value+datetime.timedelta(0, 28799, 999986)).strftime("%Y-%m-%d %H:%M:%S") #北京时间
+                _value = (_value-datetime.timedelta(0, 14400)).strftime("%Y-%m-%d %H:%M:%S") #北京时间
                 # _value = _value.strftime("%Y-%m-%d %H:%M:%S") #utc时间
             _dict[field] = _value
         return _dict
@@ -87,11 +89,12 @@ class Api(models.Model):
 
 class Case(models.Model):
     name = models.CharField(max_length=50,verbose_name=u"用例名称")
-    headers = models.CharField(max_length=600,null=True,blank=True)
-    cookies = models.CharField(max_length=600,null=True,blank=True)
-    parameter = models.CharField(max_length=200,null=True,blank=True)
+    headers = models.TextField(null=True,blank=True)
+    cookies = models.TextField(null=True,blank=True)
+    parameter = models.TextField(null=True,blank=True)
     api = models.ForeignKey(Api,verbose_name=u"所属api")
     tag = models.ForeignKey(Tag,null=True,blank=True,verbose_name=u"用例标签")
+    encryption_type = models.IntegerField(default=0,verbose_name=u"加密方式")
     validation = models.CharField(max_length=200,null=True,blank=True)
     user = models.ForeignKey(User, verbose_name=u"创建人")
     create_time = models.DateTimeField(default=datetime.datetime.now, verbose_name=u"创建时间")
@@ -123,23 +126,76 @@ class Case(models.Model):
     def __unicode__(self):
         return self.name
 
+class runtime_env(models.Model):
+    name = models.CharField(max_length=20,verbose_name=u'环境名')
+    uri = models.CharField(max_length=50,verbose_name=u'环境路径')
+    app_id = models.CharField(null=True,blank=True,max_length=100,verbose_name=u'appId')
+    token_id = models.CharField(null=True,blank=True,max_length=100,verbose_name=u'tokenId')
+    Proj = models.ForeignKey(Proj,verbose_name=u'所属项目')
+    is_deleted = models.IntegerField(default=0, verbose_name=u"是否删除")
+
+    class Meta:
+        verbose_name = u'执行环境'
+        verbose_name_plural = verbose_name
 
 class Result(models.Model):
     case = models.ForeignKey(Case,verbose_name=u"测试用例")
+    url = models.CharField(max_length=200,verbose_name=u'请求url',default='')
+    runtime_env = models.ForeignKey(runtime_env,verbose_name=u'运行环境')
     status_code = models.IntegerField(verbose_name=u"响应状态码")
     response = models.TextField(verbose_name=u'响应结果')
     request_headers = models.TextField(default='',verbose_name=u'请求头信息')
-    headers = models.TextField(default='',verbose_name=u'响应头信息')
-    cookies = models.TextField(default='',verbose_name=u'响应cookies')
+    response_headers = models.TextField(default='',verbose_name=u'响应头信息')
+    response_cookies = models.TextField(default='',verbose_name=u'响应cookies')
+    desp = models.TextField(default='',verbose_name=u'执行情况')
     is_pass = models.IntegerField(default=0,verbose_name=u'0：默认不填写，1：通过，-1：不通过')
     task_id = models.IntegerField(default=0,verbose_name=u'0：测试，其他：任务id')
     create_time = models.DateTimeField(default=datetime.datetime.now,verbose_name=u"创建时间")
+
+    def get_all_valids(self):
+        return self.verification_set.all()
+
+    def get_values(self,*fields):
+        _dict = {}
+        for field in fields:
+            if field == 'case_id':
+                _value = getattr(self,field)
+            else:
+                f= self._meta.get_field(field)
+                _value = getattr(self, field)
+                if _value is None:
+                    _value = ''
+                elif isinstance(f,models.ForeignKey) :
+                    if field != 'user':
+                        _value = _value.name
+                    else:
+                        _value = _value.username
+                elif field in ('create_time','update_time'):
+                    _value = (_value+datetime.timedelta(0, 28799, 999986)).strftime("%Y-%m-%d %H:%M:%S")
+
+            _dict[field] = _value
+        return _dict
 
     class Meta:
         verbose_name = u"测试"
         verbose_name_plural = verbose_name
 
+
+
     def __unicode__(self):
         return self.id
+
+class verification(models.Model):
+    key = models.CharField(max_length=50,verbose_name=u'验证键名')
+    exp_value = models.TextField(verbose_name=u"期望值")
+    value = models.TextField(verbose_name=u"实际值")
+    is_pass = models.IntegerField(default=0,verbose_name=u"验证是否通过，0：waiting，1：pass，-1：fail")
+    case = models.ForeignKey(Case,verbose_name=u"caseId")
+    Result = models.ForeignKey(Result,verbose_name=u"请求id")
+
+    class Meta:
+        verbose_name = u"验证"
+        verbose_name_plural = verbose_name
+
 
 

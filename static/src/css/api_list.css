@@ -1,0 +1,35 @@
+.main_content,.main_search,.main_search_nobg{
+	width: 1250px;
+	margin:10px auto;
+	position: relative;
+}
+.main_search,.main_search_nobg{
+	height: 70px;
+	margin-bottom: 10px;
+	padding-top: 20px;
+}
+.main_search{
+	background: #f7f7f7;
+}
+/*无背景颜色的main_search*/
+.main_search_nobg{
+	background: #fff;
+}
+.main_search_content{
+	height: 35px;
+	margin: 0px 25px;
+}
+.search{
+	width: 220px;
+}
+.search_input{
+	width: 100% !important;
+}
+.main ul,.main li{
+    margin: 0px !important;
+    padding: 0px  !important;
+}
+.select_api{
+	width: 220px !important;
+
+}

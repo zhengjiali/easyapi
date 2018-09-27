@@ -16,26 +16,30 @@ class GlobalSettings(object):
     menu_style = "accordion"
 
 class ProjAdmin(object):
-    list_display = ['name','father_id','create_time']
+    list_display = ['id','name','father_id','create_time']
     search_fields = ['name','father_id','create_time']
     list_filter = ['name','father_id','create_time']
 
 class ApiAdmin(object):
-    list_display = ['path','method','name','description','proj','user']
-    search_fields = ['path','method','name','description','proj','user']
-    list_filter = ['path','method','name','description','proj','user']
+    list_display = ['id','path','method','name','description','proj','user','update_time']
+    search_fields = ['path','method','name','description','proj','user','update_time']
+    list_filter = ['path','method','name','description','proj','user','update_time']
 
 
 class CaseAdmin(object):
-    list_display = ['name','parameter','api','tag']
+    list_display = ['id','name','parameter','api','tag']
     search_fields = ['name','parameter','api','tag']
     list_filter = ['name','parameter','api','tag']
 
 class TagAdmin(object):
-    list_display = ['name']
+    list_display = ['id','name']
     search_fields = ['name']
     list_filter = ['name']
 
+class ResultAdmin(object):
+    list_display = ['id','case','url','status_code','response']
+    search_fields = ['case']
+    list_filter = ['case']
 
 xadmin.site.register(Proj,ProjAdmin)
 xadmin.site.register(Api,ApiAdmin)
@@ -43,3 +47,4 @@ xadmin.site.register(views.BaseAdminView,BaseSetting)
 xadmin.site.register(views.CommAdminView,GlobalSettings)
 xadmin.site.register(Case,CaseAdmin)
 xadmin.site.register(Tag,TagAdmin)
+xadmin.site.register(Result,ResultAdmin)
