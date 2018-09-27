@@ -75,7 +75,7 @@ MIDDLEWARE_CLASSES = [
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
-    'http://172.19.162.148:8000',
+    'http://172.19.xx.xx:8000',
 
 
 )
@@ -116,10 +116,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME':'easyapi',
-        'USER':'tcredit_tester',
-        'PASSWORD':'tcredit0401',
-        'HOST':'172.19.160.185',
+        'NAME':'xxx',
+        'USER':'xxx',
+        'PASSWORD':'xxx',
+        'HOST':'xxx',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },
     }
