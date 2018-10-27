@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^task/(?P<task_id>\w+)/cases$',get_cases),
     url(r'^task/(?P<task_id>\w+)/cases/(?P<case_id>\w+)$',get_result),
     url(r'^statistics/$',CountView.as_view()),
+    url(r'^tcredit/',include("tcredit.urls",namespace='tcredit')),
 
 
 ]
