@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 from django.http import JsonResponse
 from django.shortcuts import render
 from datetime import datetime
-
+from apilogger import apiLogger
+from users.views import login_required
 
 # Create your views here.
 #联通
@@ -15,11 +16,16 @@ Telecom = {"133","153","177","180","181","189"}
 #xn_blackSelfhit
 Black = {"13379233629","15811339686","12345678901","11111111111"}
 
+logger = apiLogger()
+
+# @login_required
 def test(request):
     data = {"status":0,"msg":"sucess"}
+    logger.info(' %s %s (test) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     return JsonResponse(data)
 
 def get_age(request):
+    logger.info(' %s %s (get_age) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     idcard = request.GET.get('idcard','')
     if not idcard.isdigit():
         return JsonResponse({"status":-1,"msg":"格式错误"})
@@ -27,6 +33,7 @@ def get_age(request):
     return JsonResponse({"status":0,"msg":"请求成功","data":{"age":age}})
 
 def get_operator(request):
+    logger.info(' %s %s (get_operator) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     phone = request.GET.get('phone','')
     if not phone.isdigit() or len(phone) != 11:
         return JsonResponse({"status":-1,"msg":"格式错误"})
@@ -41,6 +48,7 @@ def get_operator(request):
         return JsonResponse({"status":0,"msg":"请求成功","data":{"operator":"Unknown"}})
 
 def check(request):
+    logger.info(' %s %s (check) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     phone = request.GET.get('phone','')
     idcard = request.GET.get('idcard','')
     name = request.GET.get('name','')
@@ -52,19 +60,7 @@ def check(request):
 
 
 def get_data(request):
-    '''
-        xn_blackSelfhit(xn自有黑名单),
-        xn_blackhit(xn第三方黑名单),
-        xn_age(xn年龄),
-        xn_openToNowdays(xn手机号码在网时长),
-        xn_currentStatus(xn手机号码当前状态),
-        xn_gender(xn性别),
-        xn_mobVerifyResult(xn手机实名验证结果),
-        xn_threeFactorVerificaiton(xn银行卡三要素验证结果),
-        xn_cardType(xn银行卡类型),
-        xn_idCardValid(xn证件有效期),
-        xn_callTotalTime30Day(xn近30天通话总时长)
-    '''
+    logger.info(' %s %s (get_data) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     idcard = request.GET.get('idcard','')
     phone = request.GET.get('phone','')
     name = request.GET.get('name','')
