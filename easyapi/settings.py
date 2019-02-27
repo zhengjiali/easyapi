@@ -116,10 +116,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'NAME':'xxx',
-        'USER':'xxx',
-        'PASSWORD':'xxx',
-        'HOST':'xxx',
+        'NAME':'easyapi',
+        'USER':'root',
+        'PASSWORD':'qiqimercy',
+        'HOST':'127.0.0.1',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },
     }
@@ -184,4 +184,32 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE':2,
      'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
+
+# logging
+LOGGING = {
+    'version':1,
+    'disable_existing_loggers':False,
+    'formatters':{
+        'verbose':{
+            'format':'[%(levelname)s %(asctime)s %(module)s:%(lineno)d] %(message)s',
+            'datefmt':'%Y%m%d %H:%M:%S',
+        }
+    },
+    'handlers':{
+        'file':{
+            'level':'INFO',
+            'class':'logging.FileHandler',
+            'formatter':'verbose',
+            'filename':'./logs/tcredit.log',
+        }
+    },
+    'loggers':{
+        'django':{
+            'handlers':['file'],
+            'level':'INFO',
+            'propagate':True,
+        },
+    }
+
 }

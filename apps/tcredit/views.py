@@ -3,9 +3,11 @@ from __future__ import unicode_literals
 from django.http import JsonResponse
 from django.shortcuts import render
 from datetime import datetime
-from apilogger import apiLogger
+# from apilogger import apiLogger
 from users.views import login_required
+import logging
 
+logger = logging.getLogger("django")
 # Create your views here.
 #联通
 Unicom = {"130","131","132","145","155","156","176","185","186"}
@@ -16,16 +18,17 @@ Telecom = {"133","153","177","180","181","189"}
 #xn_blackSelfhit
 Black = {"13379233629","15811339686","12345678901","11111111111"}
 
-logger = apiLogger()
+# logger = apiLogger()
 
 # @login_required
 def test(request):
     data = {"status":0,"msg":"sucess"}
-    logger.info(' %s %s (test) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
+    logger.info('seccess requests-test')
+    # logger.info(' %s %s (test) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     return JsonResponse(data)
 
 def get_age(request):
-    logger.info(' %s %s (get_age) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
+    # logger.info(' %s %s (get_age) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
     idcard = request.GET.get('idcard','')
     if not idcard.isdigit():
         return JsonResponse({"status":-1,"msg":"格式错误"})
