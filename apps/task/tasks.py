@@ -4,12 +4,15 @@ from .models import *
 from api.test_views import *
 import json
 from api.models import *
+from utils.send_email import send_email
+# from django.contrib.auth.models import User
 
 @shared_task
 def execute(task_id):
     t = task.objects.get(id=int(task_id))
     p = t.plan
     env = t.runtime_env
+    user = t.user
     for case in p.cases.all():
         if case.validation == '':
             valids = json.loads('{}')
@@ -26,4 +29,6 @@ def execute(task_id):
 
     t.status = 1
     t.save()
+    if user.email:
+        send_email(user.email,"done")
     return t.status

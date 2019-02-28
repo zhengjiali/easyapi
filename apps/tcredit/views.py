@@ -6,6 +6,8 @@ from datetime import datetime
 # from apilogger import apiLogger
 from users.views import login_required
 import logging
+from utils.send_email import send_email
+from time import sleep
 
 logger = logging.getLogger("django")
 # Create your views here.
@@ -22,6 +24,7 @@ Black = {"13379233629","15811339686","12345678901","11111111111"}
 
 # @login_required
 def test(request):
+    sleep(10)
     data = {"status":0,"msg":"sucess"}
     logger.info('seccess requests-test')
     # logger.info(' %s %s (test) %s %s'%(request.method,request.path_info,request.user,request.environ["REMOTE_ADDR"]))
@@ -120,3 +123,9 @@ def get_data(request):
                                             "xn_currentStatus":xn_currentStatus,"xn_gender":xn_gender,
                                             "xn_mobVerifyResult":xn_mobVerifyResult,"xn_cardType":xn_cardType,
                                             "xn_idCardValid":xn_idCardValid,"xn_callTotalTime30Day":xn_callTotalTime30Day}})
+
+def send(request):
+    if send_email("zhengjiali2014@163.com","done"):
+        return JsonResponse({"status":0})
+    else:
+        return JsonResponse({"status":-1})

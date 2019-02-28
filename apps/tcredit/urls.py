@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'check',check),
     url(r'getData',get_data),
     url(r'delay10s',delay10s),
+    url(r'sendmail',send),
 ]
