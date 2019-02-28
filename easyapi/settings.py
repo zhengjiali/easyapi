@@ -118,7 +118,7 @@ DATABASES = {
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME':'easyapi',
         'USER':'root',
-        'PASSWORD':'qiqimercy',
+        'PASSWORD':'xxxx',
         'HOST':'127.0.0.1',
         'PORT':'3306',
         'OPTIONS': { 'init_command': 'SET default_storage_engine=INNODB,character_set_connection=utf8,collation_connection=utf8_unicode_ci;' },
@@ -211,5 +211,13 @@ LOGGING = {
             'propagate':True,
         },
     }
-
 }
+
+# smtp email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.sina.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "xxxxx@sina.com"
+EMAIL_HOST_PASSWORD = "xxxxx"
+EMAIL_USE_TLS = False
+EMAIL_FROM = "EasyApi系统提醒"
