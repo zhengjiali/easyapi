@@ -60,8 +60,9 @@
             <li role="presentation" class="active"><a href="#tab_profile" id="profile-tab" role="tab" data-toggle="tab" aria-controls="tab_profile" aria-expanded="true">基本信息</a></li>
             <li role="presentation"><a href="#tab_headers" role="tab" id="headers-tab" data-toggle="tab" aria-controls="tab_headers">headers</a></li>
             <li role="presentation"><a href="#tab_cookies" role="tab" id="cookies-tab" data-toggle="tab" aria-controls="tab_cookies">cookies</a></li>
-            <li role="presentation"><a href="#tab_pams" role="tab" id="pams-tab" data-toggle="tab" aria-controls="tab_pams">输入参数设置</a></li>
-            <li role="presentation"><a href="#tab_validations" role="tab" id="validations-tab" data-toggle="tab" aria-controls="tab_validations">结果返回验证</a></li>
+            <li role="presentation"><a href="#tab_pams1" role="tab" id="pams-tab1" data-toggle="tab" aria-controls="tab_pams1">key-value入參</a></li>
+            <li role="presentation"><a href="#tab_pams2" role="tab" id="pams-tab2" data-toggle="tab" aria-controls="tab_pams2">plainText</a></li>
+            <li role="presentation"><a href="#tab_validations" role="tab" id="validations-tab" data-toggle="tab" aria-controls="tab_validations">结果验证</a></li>
           </ul>
           <div id="myTabContent" class="tab-content">
               <div role="tabpanel" class="tab-pane fade in active" id="tab_profile" aria-labelledby="profile-tab"> 
@@ -152,7 +153,7 @@
                     {% endifequal %}
              </form>
               </div>
-              <div role="tabpanel" class="tab-pane fade" id="tab_pams" aria-labelledby="pams-tab">
+              <div role="tabpanel" class="tab-pane fade" id="tab_pams1" aria-labelledby="pams-tab">
                 <form id="tab_pams_form" tct="{%ifequal counts.para_count 0 %}1{%else%}{{ counts.para_count }}{%endifequal%}">
                     {% ifequal counts.para_count 0%}
                    <div class="form-group pam_value" id="pams_area1">
@@ -180,33 +181,19 @@
                     {% endifequal %}
              </form>
               </div>
+              <div role="tabpanel" class="tab-pane fade" id="tab_pams2" aria-labelledby="pams-tab2">
+                <form id="tab_pams_form2" tct="1">
+                  <div class="form-group">
+                      <textarea class="form-control" id="paraVal" rows="3">{{ plainText }}</textarea>
+                  </div>
+              </form>
+              </div>
               <div role="tabpanel" class="tab-pane fade" id="tab_validations" aria-labelledby="validations-tab">
-                <form id="tab_validations_form" tct="{%ifequal counts.valids_count 0 %}1{%else%}{{ counts.valids_count }}{%endifequal%}">
-                    {% ifequal counts.valids_count 0%}
-                   <div class="form-group pam_value" id="validations_area1">
-                   <div class="pull-left">
-                   <input type="text" class="form-control key_name" id="validations_name1" placeholder="请输入参数key" value="" maxlength="1000">
-                   <input type="text" class="form-control key_value" id="validations_value1" placeholder="请输入参数value" value="" maxlength="1000">
-                   </div>
-                   <div class="pam_button pull-right">
-                   <button type="button" class="btn btn-default btn-circle" onclick="validations_addpam(this)" ct="1"><i class="fa fa-plus" aria-hidden="true"></i></button> <button type="button" class="btn btn-default btn-circle" onclick="validations_delpam(this)" ct="1" disabled="disabled"><i class="fa fa-remove" aria-hidden="true"></i></button>
-                   </div>
-                   </div>
-                   {% else %}
-                    {% for key,value in valids.items %}
-                  <div class="form-group pam_value" id="validations_area{{ forloop.counter }}">
-                   <div class="pull-left">
-                    <input type="text" class="form-control key_name" id="validations_name{{ forloop.counter }}" placeholder="请输入参数key" value="{{ key }}" maxlength="1000">
-                    <input type="text" class="form-control key_value" id="validations_value{{ forloop.counter }}" placeholder="请输入参数value" value="{{ value }}" maxlength="1000">
+                <form id="tab_validations_form" tct="1">
+                  <div class="form-group">
+                      <textarea class="form-control" id="validationsVal" rows="3">{{ valids }}</textarea>
                   </div>
-                  <div class="pam_button pull-right">
-                    <button type="button" class="btn btn-default btn-circle" onclick="validations_addpam(this)" ct="{{ forloop.counter }}"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                      <button type="button" class="btn btn-default btn-circle" onclick="validations_delpam(this)" ct="{{ forloop.counter }}" {% ifequal counts.valids_count 1 %}disabled="disabled" {% endifequal %}><i class="fa fa-remove" aria-hidden="true"></i></button>
-                  </div>
-                </div>
-                    {% endfor %}
-                    {% endifequal %}
-             </form>
+              </form>
               </div>
           </div>
           
