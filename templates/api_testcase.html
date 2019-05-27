@@ -54,7 +54,9 @@
           <p><span class="board_info">请求方式:</span> {{api.method}}</p>
           <p><span class="board_info">URL:</span> {{api.path}}</p>
           <p><span class="board_info">说明:</span> {{api.description}}</p>
-          <a class="btn btn-warning api_testcase_btn" href="/api/apiList/" role="button">返回</a> <a class="btn btn-default api_testcase_btn" href="/api/{{api.id}}/addTestCase" role="button">新增</a>
+          <a class="btn btn-warning api_testcase_btn" href="/api/apiList/" role="button">返回</a> 
+          <a class="btn btn-default api_testcase_btn" href="/api/{{api.id}}/initTestCase" role="button">初始化入參</a>
+          <a class="btn btn-default api_testcase_btn" href="/api/{{api.id}}/addTestCase" role="button">新增</a>
         </div>
       </div>
     </div>
@@ -91,8 +93,10 @@
   <button  type="button" class="close" aria-label="Close" onclick="close_pop_error()" style="padding-top: 5px;">
     &times;
   </button>
+  <div class="delete-btn" id="delete" style="padding-left:600px">
   <strong id="warning_mess">你确定要删除吗？</strong>
   <button class="btn" type="button" onclick="caseDelete()">确定</button>
+  </div>
 </div>
 <script src="/static/dist/js/jquery2.min.js"></script>
 <script src="/static/bootstrap3.3.0/js/bootstrap.min.js" charset="utf-8"></script>

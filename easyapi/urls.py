@@ -17,7 +17,7 @@ Including another URLconf
 from django.conf.urls import url,include
 # from django.contrib import admin
 from users.views import LoginView,LogoutView
-from api.views import get_projects,get_users,get_env
+from api.views import get_projects,get_users,get_env,upload_file
 from task.report import get_tasks,task_query,get_report,get_cases,get_result
 from task.statistics import CountView
 import xadmin
@@ -38,7 +38,7 @@ urlpatterns = [
     url(r'^task/(?P<task_id>\w+)/cases/(?P<case_id>\w+)$',get_result),
     url(r'^statistics/$',CountView.as_view()),
     url(r'^tcredit/',include("tcredit.urls",namespace='tcredit')),
-
+    url(r'^uploadFile$',upload_file),
 
 ]
 

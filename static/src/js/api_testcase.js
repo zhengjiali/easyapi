@@ -28,12 +28,10 @@ function case_createTable(data) {
   console.log(data.length);
   if (data["cases"].length >= 1) {                        
     html.push('<table class="table table-hover">');
-    html.push('<thead><tr><th style="width:150px;">用例名</th><th style="width:150px;">用例标签</th><th style="width:150px;">headers</th><th style="width:150px;">cookies</th><th style="width:150px;">parameters</th><th style="width:150px;">validation</th><th style="width:150px;">修改人</th><th style="width:200px;">操作</th></tr></thead><tbody>');
+    html.push('<thead><tr><th style="width:150px;">用例名</th><th style="width:100px;">用例标签</th><th style="width:250px;">parameters</th><th style="width:250px;">validation</th><th style="width:100px;">修改人</th><th style="width:150px;">操作</th></tr></thead><tbody>');
     for (let i = 0; i < data.cases.length; i++) {
       html.push('<tr><td id='+data.cases[i].id+'>'+data.cases[i].name+'</td>');
       html.push('<td>'+data.cases[i].tag+'</td>');
-      html.push('<td>'+data.cases[i].headers+'</td>');
-      html.push('<td>'+data.cases[i].cookies+'</td>');
       html.push('<td>'+data.cases[i].parameter+'</td>');
       html.push('<td>'+data.cases[i].validation+'</td>');
       html.push('<td>'+data.cases[i].user+'</td>');

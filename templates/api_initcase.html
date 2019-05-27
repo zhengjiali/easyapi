@@ -60,9 +60,8 @@
             <li role="presentation" class="active"><a href="#tab_profile" id="profile-tab" role="tab" data-toggle="tab" aria-controls="tab_profile" aria-expanded="true">基本信息</a></li>
             <li role="presentation"><a href="#tab_headers" role="tab" id="headers-tab" data-toggle="tab" aria-controls="tab_headers">headers</a></li>
             <li role="presentation"><a href="#tab_cookies" role="tab" id="cookies-tab" data-toggle="tab" aria-controls="tab_cookies">cookies</a></li>
-            <li role="presentation"><a href="#tab_pams1" role="tab" id="pams-tab1" data-toggle="tab" aria-controls="tab_pams1">key-value入參</a></li>
-            <li role="presentation"><a href="#tab_pams2" role="tab" id="pams-tab2" data-toggle="tab" aria-controls="tab_pams2">plainText</a></li>
-            <li role="presentation"><a href="#tab_validations" role="tab" id="validations-tab" data-toggle="tab" aria-controls="tab_validations">结果验证</a></li>
+            <li role="presentation"><a href="#tab_pams" role="tab" id="pams-tab" data-toggle="tab" aria-controls="tab_pams">输入参数设置</a></li>
+            <li role="presentation"><a href="#tab_validations" role="tab" id="validations-tab" data-toggle="tab" aria-controls="tab_validations">结果返回验证</a></li>
           </ul>
           <div id="myTabContent" class="tab-content">
               <div role="tabpanel" class="tab-pane fade in active" id="tab_profile" aria-labelledby="profile-tab"> 
@@ -123,31 +122,30 @@
                 </div>
              </form>
               </div>
-              <div role="tabpanel" class="tab-pane fade" id="tab_pams1" aria-labelledby="pams-tab1">
+              <div role="tabpanel" class="tab-pane fade" id="tab_pams" aria-labelledby="pams-tab">
                 <form id="tab_pams_form" tct="1">
-                  <div class="form-group pam_value" id="cookies_area1">
+                  <div class="form-group pam_value" id="pams_area1">
                    <div class="pull-left">
-                    <input type="text" class="form-control key_name" id="cookies_name1" placeholder="请输入参数key" value="" maxlength="1000">
-                    <input type="text" class="form-control key_value" id="cookies_value1" placeholder="请输入参数value" value="" maxlength="1000">
+                    <input type="text" class="form-control key_name" id="pams_name1" placeholder="请输入参数key" value="" maxlength="1000">
+                    <input type="text" class="form-control key_value" id="pams_value1" placeholder="请输入参数value" value="" maxlength="1000">
                   </div>
                   <div class="pam_button pull-right">
-                    <button type="button" class="btn btn-default btn-circle" onclick="cookies_addpam(this)" ct="1"><i class="fa fa-plus" aria-hidden="true"></i></button> <button type="button" class="btn btn-default btn-circle" onclick="cookies_delpam(this)" ct="1" disabled="disabled"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                    <button type="button" class="btn btn-default btn-circle" onclick="pams_addpam(this)" ct="1"><i class="fa fa-plus" aria-hidden="true"></i></button> <button type="button" class="btn btn-default btn-circle" onclick="pams_delpam(this)" ct="1" disabled="disabled"><i class="fa fa-remove" aria-hidden="true"></i></button>
                   </div>
                 </div>
              </form>
               </div>
-              <div role="tabpanel" class="tab-pane fade" id="tab_pams2" aria-labelledby="pams-tab2">
-                <form id="tab_pams_form2" tct="1">
-                  <div class="form-group">
-                      <textarea class="form-control" id="paraVal" rows="3"></textarea>
-                  </div>
-              </form>
-              </div>
               <div role="tabpanel" class="tab-pane fade" id="tab_validations" aria-labelledby="validations-tab">
                 <form id="tab_validations_form" tct="1">
-                  <div class="form-group">
-                      <textarea class="form-control" id="validationsVal" rows="3" placeholder='S({"status":0,"data":{"rank":str},"message":"成功","seqNum":str})'></textarea>
+                  <div class="form-group pam_value" id="validations_area1">
+                   <div class="pull-left">
+                    <input type="text" class="form-control key_name" id="validations_name1" placeholder="请输入参数key" value="" maxlength="1000">
+                    <input type="text" class="form-control key_value" id="validations_value1" placeholder="请输入参数value" value="" maxlength="1000">
                   </div>
+                  <div class="pam_button pull-right">
+                    <button type="button" class="btn btn-default btn-circle" onclick="validations_addpam(this)" ct="1"><i class="fa fa-plus" aria-hidden="true"></i></button> <button type="button" class="btn btn-default btn-circle" onclick="validations_delpam(this)" ct="1" disabled="disabled"><i class="fa fa-remove" aria-hidden="true"></i></button>
+                  </div>
+                </div>
               </form>
               </div>
           </div>
@@ -214,10 +212,6 @@
             }                  
           }        
         });
-});
-$('#myTabs a').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
 });
 </script>
 </body>

@@ -18,6 +18,7 @@
 <link href="/static/dist/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 <link href="/static/src/css/common.css" rel="stylesheet" type="text/css" />
 <link href="/static/src/css/api_list.css" rel="stylesheet" type="text/css" />
+
 </head>
 <style type="text/css">
 </style>
@@ -50,6 +51,12 @@
             <ul class="list-inline">
             <li class="pull-left">
                 <button type="button" class="btn btn-default" onclick="apiAdd()"><i class="fa fa-plus-square-o" aria-hidden="true"></i>&nbsp; 新增接口</button>
+            </li>
+            <li>
+              <div class="form-inline">
+                    <input type="file" name="myfile" id="file" class="form-control" />
+                    <input type="submit" class="btn btn-primary" value="导入"/ onclick="upload()">
+              </div>
             </li>
              <li class="pull-right">
                 <form class="form-inline">
@@ -123,4 +130,5 @@
  });
 </script>
 </body>
+</html>ody>
 </html>

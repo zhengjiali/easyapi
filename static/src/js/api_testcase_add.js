@@ -163,6 +163,8 @@ function case_getpams(){
 	$b.data("bootstrapValidator").validate();  
 	let flag = $b.data("bootstrapValidator").isValid();
 	let api_id = $("#api_id").attr("data-id");
+	let validations = $("#validationsVal").val();
+	let plainText = $("#paraVal").val();
 	if(flag){
 		let map={},result={};
 		let a=$("#t_case_name").val();
@@ -170,7 +172,8 @@ function case_getpams(){
 		map["headers"]=headers_getpams();
 		map["cookies"]=cookies_getpams();
 		map["parameters"]=pams_getpams();
-		map["validations"]=validations_getpams();
+		map["plainText"]=plainText;
+		map["validations"]=validations;
 		map["api_id"]= api_id
 		map["case_id"]=$("#case_id").attr("data-id");
 		let res=JSON.stringify(map);

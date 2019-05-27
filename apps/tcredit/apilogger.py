@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 __author__ = 'zhengjiali'
 __filename__ = 'apilogger.py'
 __date__ = '2018/12/10 下午4:35'
@@ -7,7 +8,8 @@ import datetime
 
 def apiLogger(filename='./logs/tcredit.log'):
     logger = logging.getLogger(__name__)
-    t = datetime.datetime.now()-datetime.timedelta(hours=12)
+    # t = datetime.datetime.now()-datetime.timedelta(hours=12)
+    t = datetime.datetime.now()
     formatter = logging.Formatter(str(t)+'  %(name)s - %(levelname)s - %(message)s')
     logger.setLevel(level=logging.INFO)
     if not logger.handlers:

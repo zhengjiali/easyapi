@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import json
 import time
+import os
 
 from users.views import login_required,LoginRequiredView
 from django.shortcuts import render
@@ -10,13 +11,13 @@ from .forms import *
 from .models import  Api,Tag,Case,Proj,runtime_env
 from django.contrib.auth.models import User
 from task.models import plan
-
+from . import dealCase
 
 # Create your views here.
 
 PER_PAGE_COUNT=10
 
-# @login_required #todo
+@login_required
 def api_list(request):
     '''
     api列表渲染页面
@@ -171,6 +172,15 @@ def data_list(request):
     result["data"]=dict(list=list(Case.objects.filter(api=api).values('id','name','parameter')))
     return JsonResponse(result)
 
+class InitCaseView(LoginRequiredView,View):
+    def get(self,request,api_id):
+        tags = Tag.objects.filter(is_deleted=0)
+        api = Api.objects.filter(id=int(api_id),is_deleted=0)
+        if api:
+            apis = api[0].get_values("id","name","path","method","proj","description")
+            return render(request,'api_initcase.html',{"api":apis,"tags":tags})
+        else:
+            return render(request,'wrong.html')
 
 class CaseNewView(LoginRequiredView,View): #todo 增加权限LoginRequiredView
     def get(self,request,api_id):
@@ -196,8 +206,13 @@ class CaseNewView(LoginRequiredView,View): #todo 增加权限LoginRequiredView
             case_headers = json.dumps(data["headers"],encoding='UTF-8',ensure_ascii=False)
             case_cookies = json.dumps(data["cookies"],encoding='UTF-8',ensure_ascii=False)
             case_api = Api.objects.get(id=int(api_id))
-            case_validation = json.dumps(data["validations"],encoding='UTF-8',ensure_ascii=False)
-            case_parameter = json.dumps(data["parameters"],encoding='UTF-8',ensure_ascii=False)
+            case_validation = data["validations"]
+            parameter = json.dumps(data["parameters"],encoding='UTF-8',ensure_ascii=False)
+            if parameter != '{}':
+                case_parameter = parameter
+            else:
+                case_parameter = data["plainText"]
+ 
             case_tag_id = int(data["profile"]["case_type"])
             if data["profile"].has_key("case_enctype"):
                 case_encryption_type = int(data["profile"]["case_enctype"])
@@ -274,10 +289,15 @@ def get_case(request,case_id):
     if case:
         api = case.api
         tags = Tag.objects.filter(is_deleted=0).order_by("id")
+        plainText = ''
         if case.parameter == '':
             para = json.loads('{}')
         else:
-            para = json.loads(case.parameter)
+            try:
+                para = json.loads(case.parameter)
+            except ValueError:
+                para = json.loads('{}')
+                plainText = case.parameter
         para_count = len(para.keys())
         if case.headers == '':
             headers = json.loads('{}')
@@ -289,21 +309,13 @@ def get_case(request,case_id):
         else:
             cookies = json.loads(case.cookies)
         cookies_count = len(cookies.keys())
-        if case.validation == '':
-            valids = json.loads('{}')
-        else:
-            valids = json.loads(case.validation)
-        valids_count = len(valids.keys())
-
+        valids = case.validation
         counts={}
         counts["para_count"]=para_count
         counts["headers_count"]=headers_count
         counts["cookies_count"]=cookies_count
-        counts["valids_count"]=valids_count
 
-
-
-        return render(request,'api_testcase_edit.html',{"api":api,"tags":tags,"case":case,"counts":counts,"para":para,"headers":headers,"cookies":cookies,"valids":valids})
+        return render(request,'api_testcase_edit.html',{"api":api,"tags":tags,"case":case,"counts":counts,"para":para,"headers":headers,"cookies":cookies,"valids":valids,"plainText":plainText})
     else:
         return render(request, 'wrong.html')
 
@@ -401,3 +413,30 @@ def get_env(request):
         p = plan.objects.filter(id=plan_id)
         envs = envs.filter(Proj=p[0].proj)
     return JsonResponse(dict(envs=list(envs.values('id','name'))))
+
+def upload_file(request): 
+    if request.method == "POST":    # 请求方法为POST时，进行处理 
+        myFile =request.FILES.get("myfile", None)    # 获取上传的文件，如果没有文件，则默认为None 
+        if not myFile: 
+            return JsonResponse({"status":-1,"msg":"no files for upload!"}) 
+        if not myFile.name.endswith('.py'):
+            return JsonResponse({"status":-1,"msg":"请输入py文件!"})
+        destination = open(os.path.join(os.getcwd()+"/upload/",myFile.name),'wb+')    # 打开特定的文件进行二进制的写操作 
+        current_file = open(os.path.join("/Users/tcxy/myproj/easyapi-1/upload/","currFile.py"),'wb+')
+        currfile = os.path.join(os.getcwd()+'/upload/currFile.py')
+        for chunk in myFile.chunks():      # 分块写入文件
+            destination.write(chunk) 
+            current_file.write(chunk)
+        destination.close() 
+        current_file.close()
+        reload(dealCase)
+        iptApi = dealCase.ImportApi(request)
+        try:
+            if iptApi.initCases() == 0:
+                # if os.path.exists(currfile):
+                #     os.remove(currfile)
+                return JsonResponse({"status":0,"msg":u"用例批量导入成功!"})
+            else:
+                return JsonResponse({"status":-1,"msg":u"用例批量导入失败!"})
+        except:
+            return JsonResponse({"status":2,"msg":"导入失败"})

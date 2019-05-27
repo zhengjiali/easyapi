@@ -346,8 +346,8 @@ function create_task() {
     let run_env = $("#envs option:selected").attr("value");
     $.ajax({
         type: "Post",
-        // url: "/plan/" + plan_id + "/exec",
-        url: "/plan/" + plan_id + "/task",
+        url: "/plan/" + plan_id + "/exec",
+        // url: "/plan/" + plan_id + "/task",
         dataType: "json",
         data: {"plan_id": plan_id, "run_env": run_env},
         success: function (data) {
